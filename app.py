@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc, callback, Input, Output
+from dash import Dash, html, dcc, Input, Output
 import plotly.express as px
 import pandas as pd
 
@@ -30,7 +30,6 @@ df_open_ports = pd.DataFrame(
 ip_addresses = list(ip_open_ports.keys())
 open_port_counts = list(ip_open_ports.values())
 
-
 # Define essential ports that should not be open
 essential_ports = {"137", "139", "22", "53", "25", "3389", "20", "21", "23"}
 
@@ -41,7 +40,6 @@ essential_ports_data = pd.DataFrame(columns=["IP", "Essential Port"])
 for _, row in df.iterrows():
     ip_address = row["IP"]
     open_ports = row["Open Ports"].split()
-    print(open_ports)
 
     # Check if any of the open ports are in the list of essential ports
     for port in open_ports:
@@ -54,6 +52,49 @@ for _, row in df.iterrows():
                 ],
                 ignore_index=True,
             )
+
+# Classify devices into network device, server, or client based on active ports and services
+def classify_device(row):
+    network_ports = {"22", "23", "80", "443"}  # Common network ports
+    server_services = {"21", "22", "80", "443", "3306", "3389", "8080"}  # Typical server services
+
+    open_ports = set(row["Open Ports"].split())
+
+    if open_ports.issubset(network_ports):
+        return "Network Device"
+    elif open_ports.intersection(server_services):
+        return "Server"
+    else:
+        return "Client"
+
+# Apply classification function to each row
+df["Device Type"] = df.apply(classify_device, axis=1)
+device_type_counts = df["Device Type"].value_counts()
+
+# Plot device type distribution
+fig_device_type = px.pie(
+    values=device_type_counts.values,
+    names=device_type_counts.index,
+    title="Device Type Distribution",
+)
+
+# Extract individual ports and create a histogram
+all_ports = [port for ports in df["Open Ports"].str.split() for port in ports]
+port_counts = pd.Series(all_ports).value_counts()
+
+# Plot distribution of individual ports
+fig_port_distribution = px.bar(
+    x=port_counts.index,
+    y=port_counts.values,
+    labels={"x": "Port", "y": "Count"},
+    title="Distribution of Open Ports",
+)
+
+# Update layout for better visibility of x-axis labels
+fig_port_distribution.update_layout(
+    xaxis=dict(tickangle=45),
+)
+
 
 # Create the Plotly bar figure for OS counts
 fig_os = px.bar(
@@ -81,10 +122,17 @@ fig = px.scatter(
     color="Essential Port",
 )
 
-# Group data by device and count unique open ports
-open_ports_count = df.groupby("IP")["Open Ports"].nunique()
-print(open_ports_count)
+# Distribution of Open Ports
+fig_open_ports_dist = px.histogram(
+    df, x="Open Ports", title="Distribution of Open Ports"
+)
 
+# Operating System Distribution
+fig_os_distribution = px.pie(
+    values=os_counts.values,
+    names=os_counts.index,
+    title="Operating System Distribution",
+)
 
 # Initialize the Dash app
 app = Dash(__name__)
@@ -95,11 +143,27 @@ app.layout = html.Div(
         html.H1(children="Visualization of Up Operating Systems and Open Ports"),
         html.Div(
             children=[
+                html.Button("Run Nmap Scan", id="run-nmap-button", n_clicks=0),
+                html.Div(id="nmap-output"),
+            ]
+        ),
+        html.Div(
+            children=[
                 dcc.Graph(id="os-bar-graph", figure=fig_os),
                 html.H1(children="Open Ports Count per IP Address"),
                 dcc.Graph(id="open-ports-line-chart", figure=fig_port),
                 html.H1(children="IP Addresses with Essential Ports Open"),
                 dcc.Graph(id="essential-ports-scatter-plot", figure=fig),
+                html.H1(children="Device Type Distribution"),
+                dcc.Graph(id="device-type-distribution", figure=fig_device_type),
+            ]
+        ),
+        html.Div(
+            children=[
+                html.H1(children="Distribution of Open Ports"),
+                dcc.Graph(id="port-distribution", figure=fig_port_distribution),
+                html.H1(children="Operating System Distribution"),
+                dcc.Graph(id="os-distribution", figure=fig_os_distribution),
             ]
         ),
     ]
