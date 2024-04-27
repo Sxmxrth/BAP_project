@@ -1,9 +1,0 @@
-IP,Status,Hostname,MAC Address,Vendor,OS,Open Ports,Services,Timestamp
-172.16.40.102,up,,,Unknown,Apple Mac OS X 10.4.8 - 10.4.11 (Tiger) (Darwin 8.8.0 - 8.11.0),5000 7000,rtsp/AirTunes rtspd rtsp/AirTunes rtspd,2024-04-27 12:56:37.648417
-172.16.40.108,up,,,Unknown,Linux 2.6.32,902,vmware-auth/VMware Authentication Daemon,2024-04-27 12:56:37.648417
-172.16.40.126,up,,,Unknown,FreeBSD 6.2-RELEASE,80 443 3306,http/Apache httpd http/Apache httpd mysql/,2024-04-27 12:56:37.648417
-172.16.40.128,up,,,Unknown,Microsoft Windows 10 1703,135 7070 8090,msrpc/Microsoft Windows RPC realserver/ tcpwrapped/,2024-04-27 12:56:37.648417
-172.16.40.131,up,,,Unknown,Apple iOS 11.0,5000 7000 49152,rtsp/AirTunes rtspd rtsp/AirTunes rtspd bandwidth-test/MikroTik bandwidth-test server,2024-04-27 12:56:37.648417
-172.16.40.60,up,,,Unknown,Apple TV 5,5000 7000,rtsp/AirTunes rtspd rtsp/AirTunes rtspd,2024-04-27 12:56:37.648417
-172.16.40.78,up,,,Unknown,Apple iOS 11.0,3306 5000 7000,mysql/ rtsp/AirTunes rtspd rtsp/AirTunes rtspd,2024-04-27 12:56:37.648417
-172.16.40.82,up,,,Unknown,FreeBSD 6.2-RELEASE,80 443 3306,http/Apache httpd http/Apache httpd mysql/MariaDB,2024-04-27 12:56:37.648417

@@ -3,7 +3,7 @@ import plotly.express as px
 import pandas as pd
 
 # Load the CSV dataset
-df = pd.read_csv("nmap_results1.csv")
+df = pd.read_csv("nmap_results.csv")
 
 # Filter out only the rows where the Status is 'Up'
 df_up = df[df["Status"] == "up"]
