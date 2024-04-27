@@ -95,7 +95,6 @@ fig_port_distribution.update_layout(
     xaxis=dict(tickangle=45),
 )
 
-
 # Create the Plotly bar figure for OS counts
 fig_os = px.bar(
     x=os_counts.index,
@@ -134,8 +133,23 @@ fig_os_distribution = px.pie(
     title="Operating System Distribution",
 )
 
+# Temporal Analysis: Number of devices online over time
+# Parse the timestamp column as datetime
+df["Timestamp"] = pd.to_datetime(df["Timestamp"])
+
+# Group by timestamp and count the number of devices online at each timestamp
+temporal_data = df.groupby(pd.Grouper(key="Timestamp", freq="H")).size().reset_index(name="Device Count")
+
+# Plot time series graph showing the number of devices online over time
+fig_temporal_analysis = px.line(
+    temporal_data,
+    x="Timestamp",
+    y="Device Count",
+    title="Number of Devices Online Over Time",
+)
+
 # Initialize the Dash app
-app = Dash(__name__)
+app = Dash(_name_)
 
 # Define the layout of the Dash app
 app.layout = html.Div(
@@ -166,8 +180,14 @@ app.layout = html.Div(
                 dcc.Graph(id="os-distribution", figure=fig_os_distribution),
             ]
         ),
+        html.Div(
+            children=[
+                html.H1(children="Temporal Analysis: Number of Devices Online Over Time"),
+                dcc.Graph(id="temporal-analysis", figure=fig_temporal_analysis),
+            ]
+        ),
     ]
 )
 
-if __name__ == "__main__":
+if _name_ == "_main_":
     app.run_server(debug=True)
