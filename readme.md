@@ -1,4 +1,4 @@
-# Nmap Data Visualization Project
+# Network Monitoring Tool
 
 This project provides data visualization tools for analyzing Nmap scan results.
 
