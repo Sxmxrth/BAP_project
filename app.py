@@ -53,10 +53,19 @@ for _, row in df.iterrows():
                 ignore_index=True,
             )
 
+
 # Classify devices into network device, server, or client based on active ports and services
 def classify_device(row):
     network_ports = {"22", "23", "80", "443"}  # Common network ports
-    server_services = {"21", "22", "80", "443", "3306", "3389", "8080"}  # Typical server services
+    server_services = {
+        "21",
+        "22",
+        "80",
+        "443",
+        "3306",
+        "3389",
+        "8080",
+    }  # Typical server services
 
     open_ports = set(row["Open Ports"].split())
 
@@ -66,6 +75,7 @@ def classify_device(row):
         return "Server"
     else:
         return "Client"
+
 
 # Apply classification function to each row
 df["Device Type"] = df.apply(classify_device, axis=1)
@@ -138,7 +148,11 @@ fig_os_distribution = px.pie(
 df["Timestamp"] = pd.to_datetime(df["Timestamp"])
 
 # Group by timestamp and count the number of devices online at each timestamp
-temporal_data = df.groupby(pd.Grouper(key="Timestamp", freq="H")).size().reset_index(name="Device Count")
+temporal_data = (
+    df.groupby(pd.Grouper(key="Timestamp", freq="h"))
+    .size()
+    .reset_index(name="Device Count")
+)
 
 # Plot time series graph showing the number of devices online over time
 fig_temporal_analysis = px.line(
@@ -149,7 +163,7 @@ fig_temporal_analysis = px.line(
 )
 
 # Initialize the Dash app
-app = Dash(_name_)
+app = Dash(__name__)
 
 # Define the layout of the Dash app
 app.layout = html.Div(
@@ -182,12 +196,14 @@ app.layout = html.Div(
         ),
         html.Div(
             children=[
-                html.H1(children="Temporal Analysis: Number of Devices Online Over Time"),
+                html.H1(
+                    children="Temporal Analysis: Number of Devices Online Over Time"
+                ),
                 dcc.Graph(id="temporal-analysis", figure=fig_temporal_analysis),
             ]
         ),
     ]
 )
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     app.run_server(debug=True)
