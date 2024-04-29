@@ -2,9 +2,7 @@ from dash import Dash, html, dcc, Input, Output
 import plotly.express as px
 import pandas as pd
 
-external_scripts = [
-    {'src': 'https://cdn.tailwindcss.com'}
-]
+external_scripts = [{"src": "https://cdn.tailwindcss.com"}]
 
 # Load the CSV dataset
 df = pd.read_csv("nmap_results.csv")
@@ -172,31 +170,70 @@ app = Dash(__name__, external_scripts=external_scripts)
 # Define the layout of the Dash app
 app.layout = html.Div(
     children=[
-        html.H1(className='text-2xl font-bold m-10',children="Visualization of Up Operating Systems and Open Ports"),
+        html.H1(
+            className="text-2xl font-bold m-10",
+            children="Visualization of Up Operating Systems and Open Ports",
+        ),
         html.Div(
             # className=' ',
             children=[
-                html.Button("Run Nmap Scan",className='py-4 font-bold border-2 rounded-lg px-5 ml-10 hover:bg-blue-200', id="run-nmap-button", n_clicks=0),
+                html.Button(
+                    "Run Nmap Scan",
+                    className="py-4 font-bold border-2 rounded-lg px-5 ml-10 hover:bg-blue-200",
+                    id="run-nmap-button",
+                    n_clicks=0,
+                ),
                 html.Div(id="nmap-output"),
             ]
         ),
         html.Div(
             children=[
-                dcc.Graph(className='border-2 m-16 rounded-lg ', id="os-bar-graph", figure=fig_os),
-                dcc.Graph(className='border-2 m-16 rounded-lg ', id="open-ports-line-chart", figure=fig_port),
-                dcc.Graph(className='border-2 m-16 rounded-lg ', id="essential-ports-scatter-plot", figure=fig),
-                dcc.Graph(className='border-2 m-16 rounded-lg ', id="device-type-distribution", figure=fig_device_type),
+                html.H1(
+                    className="text-2xl font-bold m-10", children="Nmap Scan Results"
+                ),
+                dcc.Graph(
+                    className="border-2 m-16 rounded-lg ",
+                    id="os-bar-graph",
+                    figure=fig_os,
+                ),
+                dcc.Graph(
+                    className="border-2 m-16 rounded-lg ",
+                    id="open-ports-line-chart",
+                    figure=fig_port,
+                ),
+                dcc.Graph(
+                    className="border-2 m-16 rounded-lg ",
+                    id="essential-ports-scatter-plot",
+                    figure=fig,
+                ),
+                dcc.Graph(
+                    className="border-2 m-16 rounded-lg ",
+                    id="device-type-distribution",
+                    figure=fig_device_type,
+                ),
             ]
         ),
         html.Div(
             children=[
-                dcc.Graph(className='border-2 m-16 rounded-lg ',id="port-distribution", figure=fig_port_distribution),
-                dcc.Graph(className='border-2 m-16 rounded-lg ', id="os-distribution", figure=fig_os_distribution),
+                dcc.Graph(
+                    className="border-2 m-16 rounded-lg ",
+                    id="port-distribution",
+                    figure=fig_port_distribution,
+                ),
+                dcc.Graph(
+                    className="border-2 m-16 rounded-lg ",
+                    id="os-distribution",
+                    figure=fig_os_distribution,
+                ),
             ]
         ),
         html.Div(
             children=[
-                dcc.Graph(className='border-2 m-16 rounded-lg ', id="temporal-analysis", figure=fig_temporal_analysis),
+                dcc.Graph(
+                    className="border-2 m-16 rounded-lg ",
+                    id="temporal-analysis",
+                    figure=fig_temporal_analysis,
+                ),
             ]
         ),
     ]
