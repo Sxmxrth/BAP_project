@@ -188,9 +188,6 @@ app.layout = html.Div(
         ),
         html.Div(
             children=[
-                html.H1(
-                    className="text-2xl font-bold m-10", children="Nmap Scan Results"
-                ),
                 dcc.Graph(
                     className="border-2 m-16 rounded-lg ",
                     id="os-bar-graph",
